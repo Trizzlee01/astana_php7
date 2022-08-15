@@ -15,14 +15,28 @@ use App\Http\Controllers\ManageAccountController;
 |
 */
 
-Route::get('/', [AuthManageController::class, 'viewLogin'])->middleware('guest');
-Route::get('/login', [AuthManageController::class, 'viewLogin'])->name('login')->middleware('guest');
-Route::post('/verify_login', [AuthManageController::class, 'verifyLogin'])->middleware('guest');
-Route::post('/logout', [AuthManageController::class, 'logoutProcess']);
+// Route::get('/', [AuthManageController::class, 'viewLogin'])->middleware('guest');
+// Route::get('/login', [AuthManageController::class, 'viewLogin'])->name('login')->middleware('guest');
+// Route::post('/verify_login', [AuthManageController::class, 'verifyLogin'])->middleware('guest');
+// Route::post('/logout', [AuthManageController::class, 'logoutProcess']);
 
-Route::get('/dashboard', [DashboardManageController::class, 'viewDashboard'])->middleware('auth');
+// Route::get('/dashboard', [DashboardManageController::class, 'viewDashboard'])->middleware('auth');
 
-Route::middleware(['auth', 'checkRole:superadmin_pabrik,superadmin_distributor'])->group(function () {
-    Route::resource('/manage_account/users', ManageAccountController::class);
-    Route::post('fetch-cities', [ManageAccountController::class, 'fetchCity']);
+// Route::middleware(['auth', 'checkRole:superadmin_pabrik,superadmin_distributor'])->group(function () {
+//     Route::resource('/manage_account/users', ManageAccountController::class);
+//     Route::post('fetch-cities', [ManageAccountController::class, 'fetchCity']);
+// });
+
+Route::get('/', 'App\Http\Controllers\AuthManageController@viewLogin')->middleware('guest');
+Route::get('/login', 'App\Http\Controllers\AuthManageController@viewLogin')->name('login')->middleware('guest');
+Route::post('/verify_login', 'App\Http\Controllers\AuthManageController@verifyLogin')->middleware('guest');
+Route::post('/logout', 'App\Http\Controllers\AuthManageController@logoutProcess');
+
+Route::get('/dashboard', 'App\Http\Controllers\DashboardManageController@viewDashboard')->middleware('auth');
+
+Route::middleware('auth', 'checkRole:superadmin_pabrik,superadmin_distributor')->group(function(){
+    Route::resource('/manage_account/users', 'App\Http\Controllers\ManageAccountController');
+    Route::post('/fetch-cities', 'App\Http\Controllers\ManageAccountController@fetchCity');
 });
+
+
