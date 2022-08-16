@@ -117,7 +117,7 @@ class ManageAccountController extends Controller
 
         if($request->file('image'))
         {
-            $validateData['image'] = $request->file('image')->store('manage_account/users');
+            $validateData['image'] = $request->file('image')->store('/public/manage_account/users');
         }
 
         $validateData['password'] = Hash::make($request->password);
@@ -246,7 +246,7 @@ class ManageAccountController extends Controller
                 Storage::delete($request->oldImage);
             }
             // kalo ada gambar baru = hapus gambar lama lalu upload yg baru
-            $validateData['image'] = $request->file('image')->store('manage_account/users');
+            $validateData['image'] = $request->file('image')->store('/public/manage_account/users');
         }
 
         

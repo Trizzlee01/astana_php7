@@ -26,7 +26,7 @@
 
 @section('content')
 <div class="container justify text-center">
-    <form action="/manage_account/users/{{ $user->id }}" method="post" name="create_form" enctype="multipart/form-data">
+    <form action="{{ url('/manage_account/users/'.$user->id) }}" method="post" name="create_form" enctype="multipart/form-data">
         @method('put')
         @csrf
         <div class="form-group">

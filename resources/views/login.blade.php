@@ -246,7 +246,7 @@
                                     <hr>
                                 </div>
                             </div>
-                            <form action="/verify_login" method="post" name="login_form">
+                            <form action="{{ url('/verify_login') }}" method="post" name="login_form">
                                 @csrf
                                 {{-- <div class="row form-group">
                                     <div class="col-sm">

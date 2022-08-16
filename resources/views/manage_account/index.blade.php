@@ -33,7 +33,7 @@
                                     </div>
                             <div class="col-sm">
                                 <div class="form-group text-right" >
-                                    <input type="submit" onclick="window.location.href='/manage_account/users/create'" class="btn btn-primary tambahAkun" value="+ Add">
+                                    <input type="submit" onclick="window.location.href='{{ url('/manage_account/users/create') }}'" class="btn btn-primary tambahAkun" value="+ Add">
                                 </div>
                             </div>
 
@@ -41,7 +41,7 @@
                         <hr>
                         <div class="row">
                             <div class="col-4">
-                                <form action="/manage_account/users">
+                                <form action="{{ url('/manage_account/users') }}">
                                     <div class="input-group">
                                         <input type="text" class="form-control" placeholder="Cari" name="search" value={{ request('search') }}>
                                         <button class="btn" style="background-color:rgba(52, 25, 80, 1); color:white" type="submit">Submit</button>
@@ -131,16 +131,14 @@
                                                     <button type='button' class='btn' data-toggle='modal'  style='background-color:rgb(42, 20, 64); color:white'
                                                     data-target='#mmMyModal{{ $user->id }}' style='color: #D17826;'>
                                                     <i class='fas fa-eye'></i></button>
-                                                    {{-- <a href="/manage_account/users/{{ $user->id }}"><i class='fas fa-eye'></i></a> --}}
                                                 </td>
                                                 <td class='col-2'>
                                                     <div class='btn-group'>
-                                                        {{-- <button type='button' class='btn btn-edit' onclick="window.location.href='/manage_account/{{ $user }}/edit'" data-target='#myModal' style='color: #FDBE33;'> --}}
-                                                        <button type='button' class='btn btn-edit' onclick="window.location.href='/manage_account/users/{{ $user->id }}/edit'" style='color: #FDBE33;'>
-                                                        {{-- <button type='button' class='btn btn-edit' data-target='#editModal' style='color: #FDBE33;'> --}}
+                                                        {{-- <button type='button' class='btn btn-edit' onclick="window.location.href='{{url('/manage_account/users/{{ $user->id }}/edit')}}'" style='color: #FDBE33;'> --}}
+                                                        <button type='button' class='btn btn-edit' onclick='window.location.href="{{url('/manage_account/users/'.$user->id.'/edit')}}"' style='color: #FDBE33;'>
                                                         <i class='fas fa-edit'></i>&nbspEdit</button>
                                                         {{-- url('/manage_account/delete') }}/" + data_delete --}}
-                                                        <form action="/manage_account/users/{{ $user->id }}" method="post">
+                                                        <form action="{{ url('/manage_account/users/'.$user->id) }}" method="post">
                                                             @method('delete')
                                                             @csrf
                                                             <button type='submit' class='btn btn-remove' data-toggle='modal' onclick='return confirm("Apakah anda yakin mau menghapus {{ $user->username }} ?");' style='color: #D17826;'>

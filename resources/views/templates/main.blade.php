@@ -118,7 +118,7 @@
                             <img src="{{asset('images/templates/main/dashboard.png')}}" style="height:16px;width:16px;" class="invert">
                         </div>
                         <div class="col">
-                            <a href="/dashboard">Dashboard</a>
+                            <a href="{{ url('/dashboard') }}">Dashboard</a>
                         </div>
                     </div>
                 </li>
@@ -130,7 +130,7 @@
                             <img src="{{ asset('images/templates/main/kelola akun.png') }}" style="height:16px;width:16px;" class="invert">
                         </div>
                         <div class="col">
-                            <a href="/manage_account/users">Kelola Akun</a>
+                            <a href="{{ url('/manage_account/users') }}">Kelola Akun</a>
                         </div>
                         {{-- <div class="col">
                             <a href="#kelolaakun" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Kelola Akun</a>
@@ -338,7 +338,7 @@
                     </div>
                 </li>
         
-                <form action="/logout" method="post">
+                <form action="{{ url('/logout') }}" method="post">
                     @csrf
                     <div class="row">
                         <button type="submit" class="col">Logout</button>
