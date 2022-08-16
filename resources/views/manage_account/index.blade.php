@@ -76,7 +76,6 @@
                                             <th scope="col">Posisi</th>
                                             <th scope="col">Admin Input</th>
                                             <th scope="col">Tanggal Diinput</th>
-                                            <th scope="col">Lihat Info Akun</th>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
@@ -127,11 +126,6 @@
                                                 <td>
                                                     {{ $user->updated_at->format('d/m/y H:m:s') }}
                                                 </td>
-                                                <td>
-                                                    <button type='button' class='btn' data-toggle='modal'  style='background-color:rgb(42, 20, 64); color:white'
-                                                    data-target='#mmMyModal{{ $user->id }}' style='color: #D17826;'>
-                                                    <i class='fas fa-eye'></i></button>
-                                                </td>
                                                 <td class='col-2'>
                                                     <div class='btn-group'>
                                                         {{-- <button type='button' class='btn btn-edit' onclick="window.location.href='{{url('/manage_account/users/{{ $user->id }}/edit')}}'" style='color: #FDBE33;'> --}}
@@ -153,31 +147,6 @@
                                                     </div>
                                                 </td>
                                             </tr>
-
-                                            <!-- Modal Remove Account -->
-                                            <div class="modal fade" id="mmMyModal{{ $user->id }}" role="dialog" style="border-radius:45px">
-                                                <div class="modal-dialog">
-                                                    <!-- Modal content-->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header" style="background:rgba(52, 25, 80, 1); color:white;">
-                                                            <p id="employeeidname" style="font-weight: bold;">Deuscode</p>
-                                                            <button type="button" class="close" data-dismiss="modal" style="color:white;">×</button>
-                                                        </div>
-                                                        <div class="modal-body" style="text-align:left">
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    Username : {{ $user->username }}
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    {{-- Password &nbsp: {{ bcrypt('1') }} --}}
-                                                                    Password &nbsp: {{ $user->password }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -187,44 +156,6 @@
                         @else
                         <p class="text-center fs-4">No user found</p>
                         @endif
-
-                        <!-- Modal Remove Account -->
-                        <div class="modal fade" id="mmMyModal" role="dialog" style="border-radius:45px">
-                            <div class="modal-dialog">
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header" style="background:rgba(52, 25, 80, 1); color:white;">
-                                        <p id="employeeidname" style="font-weight: bold;">Deuscode</p>
-                                        <button type="button" class="close" data-dismiss="modal" style="color:white;">×</button>
-                                    </div>
-                                                    
-                                    <div class="modal-body" style="text-align:left">
-                                        <!-- <button id="btnModalBiodata" onclick="msuccess('remove')" style="text-align:left">
-                                            <a style="color: rgba(3, 15, 39, 1); text-align:left">
-                                                <i class='fas fa-edit'></i>&nbspRemove Akun</a></button>
-                                        <hr> -->
-                                        <div class="row">
-                                            <div class="col-12">
-                                                Username : deuscode
-                                            </div>
-                                            <!-- <div class="col-6">
-                                                deuscode
-                                            </div> -->
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                Password &nbsp: lalalolo
-                                            <!-- </div>
-                                            <div class="col-6">
-                                                lalalolo
-                                            </div> -->
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
 
                     </div>
                 </div>
