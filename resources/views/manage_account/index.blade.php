@@ -83,20 +83,6 @@
                                     <tbody id="tablebody">
                                         @foreach($users as $user)
                                             <tr>
-                                                {{-- <td class='jid full-body'>
-                                                    <div class=row>
-                                                        <div class=col-4>
-                                                            @if($user->image)
-                                                                <img src={{ asset('storage/' . $user->image) }} alt=profile-img class=avatar-50 img-fluid/>
-                                                            @else
-                                                                <img src=images/manage_account/users/11.png alt=profile-img class=avatar-50 img-fluid/>
-                                                            @endif
-                                                        </div>
-                                                        <div class=col-1>
-                                                            {{ $user->firstname}} {{ $user->lastname }}
-                                                        </div>
-                                                    </div>
-                                                </td> --}}
                                                 <td class='jname full-body'>
                                                     @if($user->image)
                                                         <img src={{ asset('storage/' . $user->image) }} alt=profile-img class=avatar-50 img-fluid/>

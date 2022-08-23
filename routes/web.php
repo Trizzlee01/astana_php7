@@ -39,4 +39,10 @@ Route::middleware('auth', 'checkRole:superadmin_pabrik,superadmin_distributor')-
     Route::post('/fetch-cities', 'App\Http\Controllers\ManageAccountController@fetchCity');
 });
 
+Route::middleware('auth', 'checkRole:superadmin_pabrik,superadmin_distributor,reseller')->group(function(){
+    Route::resource('/manage_product/products', 'App\Http\Controllers\ProductManageController');
+    Route::get('manage_product/detail_pasok/{product_history}', 'App\Http\Controllers\ProductManageController@detailPasok');
+    Route::get('/manage_product/pusat', 'App\Http\Controllers\ProductManageController@indexPusat');
+});
+
 

@@ -147,6 +147,7 @@
                 </li>
                 @endcan
 
+                @canany(['superadmin_pabrik','superadmin_distributor'])
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col-2 align-self-center">
@@ -156,18 +157,21 @@
                             <a href="#kelolabarang" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Kelola Barang</a>
                             <ul class="collapse list-unstyled" id="kelolabarang">
                                 <li>
-                                    <a href="kelolaBarang_daftarBarangPusat.php">Daftar Barang Pusat</a>
+                                    <a href="{{ url('/manage_product/pusat') }}">Daftar Barang Pusat</a>
                                 </li>
+                                @can('superadmin_pabrik')
                                 <li>
                                     <a href="kelolaBarang_daftarBarangDistributor.php">Daftar Barang Distributor</a>
                                 </li>
                                 <li>
-                                    <a href="kelolaBarang_inputPasokBarang.php">Input Pasok Barang</a>
+                                    <a href="{{ url('/manage_product/products') }}">Input Pasok Barang</a>
                                 </li>
+                                @endcan
                             </ul>
                         </div>
                     </div>
                 </li>
+                @endcan
         
                 <li class="list-group-item">
                     <div class="row">
