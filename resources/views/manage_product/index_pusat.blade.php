@@ -29,6 +29,12 @@
                                     </button>
                                     <button type='button' class='btn btn-primary'><i class='fa fa-print'></i> Cetak</button>
                                 </div>
+                                <div class="col-sm text-right">
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="location.href='kelolaBarang_daftarBarangPusatAdd.php'">
+                                        <span>+ Add</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div><hr>
@@ -100,6 +106,9 @@
                                                             <td>Rp {{ $product->stok * $product->harga_modal }}</td>
                                                             <td>{{ $product->keterangan }}</td>
                                                             <td><button class="btn btn-primary btn-sm" onclick="location.href='{{ url('/manage_product/products/'.$product->id) }}'"><i class="fa fa-eye"></button></td>
+                                                            <td><button type="button" class="btn btn-sm btn-warning" onclick="location.href='kelolaBarang_daftarBarangPusatEdit.php'">
+                                                                    <span><i class="fa fa-edit"></i>Edit</span>
+                                                                </button></td>
                                                         </tr>
                                                     @endforeach
                                                     

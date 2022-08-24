@@ -97,7 +97,9 @@
                     @foreach($masuk as $m)
                         <tr>
                             <td>{{ $m->created_at->format('d/m/y H:m:s') }}</td>
-                            <td>{{ $m->admin }}</td>
+                            <td>
+                                {{ $superadmins->where('id', $m->admin_id)->first()->firstname }} {{ $superadmins->where('id', $m->admin_id)->first()->lastname }}
+                            </td>
                             <td>{{ $m->jumlah }} pcs</td>
                         </tr>
                     @endforeach

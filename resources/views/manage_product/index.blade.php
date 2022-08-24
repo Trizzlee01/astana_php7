@@ -60,19 +60,23 @@
                         <th scope="col">Nama Pasok</th>
                         <th scope="col">Total Pasok</th>
                         <th>Admin</th>
-                        <th>Waktu Input</th>
+                        {{-- <th>Waktu Input</th> --}}
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($histories_group as $history)
                         <tr>
-                            <td>12 Januari 2022</td>
+                            {{-- <td>12 Januari 2022</td> --}}
+                            {{-- <td>{{ $history->created_at->format('d/M/y H:m:s') }}</td> --}}
+                            <td>{{ $history->created_at->format('j F Y H:m:s') }}</td>
                             <td>{{ $history->kode_pasok }}</td>
                             <td>{{ $history->nama_supplier }}</td>
-                            <td>Rp 4.390.000.-</td>
-                            <td>{{ $history->admin }}</td>
-                            <td>{{ $history->created_at->format('d/m/y H:m:s') }}</td>
+                            <td>Rp {{ number_format($history->total, 0, ',', '.') }}</td>
+                            <td>
+                                {{ $superadmins->where('id', $history->admin_id)->first()->firstname }} {{ $superadmins->where('id', $history->admin_id)->first()->lastname }}
+                            </td>
+                            {{-- <td>{{ $history->created_at->format('d/m/y H:m:s') }}</td> --}}
                             <td>
                                 <div class="form-group text-left">
                                     <button type="button" onclick='window.location.href="{{ url('/manage_product/detail_pasok/'.$history->kode_pasok) }}"' class="btn btn-primary">

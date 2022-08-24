@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductHistory;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class ProductManageController extends Controller
 {
@@ -17,7 +18,11 @@ class ProductManageController extends Controller
     public function index()
     {
         // dd(ProductHistory::groupBy('kode_pasok')->get());
-        return view('manage_product.index', ['histories_group' => ProductHistory::groupBy('kode_pasok')->get()]);
+        
+        // return view('manage_product.index', ['histories_group' => ProductHistory::groupBy('kode_pasok')->get()], ['superadmins' => User::where('user_position', 'superadmin_pabrik')->get()]);
+        
+        // dd(ProductHistory::groupBy('kode_pasok')->select('product_histories.*')->selectRaw('sum(jumlah*harga_beli) as total')->get());
+        return view('manage_product.index', ['histories_group' => ProductHistory::groupBy('kode_pasok')->select('product_histories.*')->selectRaw('sum(jumlah*harga_beli) as total')->get()], ['superadmins' => User::where('user_position', 'superadmin_pabrik')->get()]);
     }
 
     public function indexPusat()
@@ -48,10 +53,12 @@ class ProductManageController extends Controller
         $validateData = $request->validate([
             'kode_pasok' => 'required',
             'surat_jalan' => 'required',
-            'tanggal_surat' => 'required|date',
+            'tanggal_surat' => 'required',
         ]);
         
         $validateData['nama_supplier'] = 'pabrik astana';
+        $validateData['tanggal_surat'] = date('Y-m-d', strtotime($request->input('tanggal_surat')));
+        $validateData['admin_id'] = auth()->user()->id;
         // dd($validateData);
 
         for ($i = 1; $i <= 5; $i++)
@@ -62,7 +69,13 @@ class ProductManageController extends Controller
                 $validateData['jumlah'] = (int)$request->input("jumlah".$i);
                 $validateData['harga_beli'] = (int)$request->input("harga_beli".$i);
                 // dd($validateData);
+                
                 ProductHistory::create($validateData);
+
+                $stok = Product::where('id', $i)->first();
+                // dd($stok->stok);
+                $updateStok = $stok->stok + $validateData['jumlah'];
+                Product::where('id', $i)->update(array('stok' => $updateStok));
             }
         }
 
@@ -81,7 +94,7 @@ class ProductManageController extends Controller
     public function show(Product $product)
     {
         // dd(ProductHistory::where('product_type_id',$product->product_type_id)->get());
-        return view('manage_product.detail_pusat', ['masuk' => ProductHistory::where('product_type_id',$product->product_type_id)->get()]);
+        return view('manage_product.detail_pusat', ['masuk' => ProductHistory::where('product_type_id',$product->product_type_id)->get()], ['superadmins' => User::where('user_position', 'superadmin_pabrik')->get()]);
     }
 
     public function detailPasok($kode_pasok)

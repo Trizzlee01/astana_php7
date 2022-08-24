@@ -18,7 +18,7 @@ class CreateProductHistoriesTable extends Migration
             $table->string('kode_pasok');
             $table->string('nama_supplier');
             $table->string('surat_jalan');
-            $table->string('admin');
+            $table->foreignId('admin_id');
             $table->date('tanggal_surat');
             $table->foreignId('product_type_id');
             $table->integer('jumlah');

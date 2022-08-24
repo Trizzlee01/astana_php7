@@ -30,7 +30,6 @@
                         <th scope="col">Jumlah</th>
                         <th scope="col">Harga Beli</th>
                         <th scope="col">Subtotal</th>
-                        <th scope="col">Tanggal</th>
                     </tr>
                 </thead>
                 <tbody style="text-align:left">
@@ -41,10 +40,9 @@
                         <tr>
                             <td>{{ $detail->product_type->kode_produk }}</td>
                             <td>{{ $detail->product_type->nama_produk }}</td>
-                            <td>{{ $detail->jumlah }} dos</td>
-                            <td>Rp. {{ $detail->harga_beli }}</td>
-                            <td>Rp. {{ $detail->jumlah * $detail->harga_beli }}</td>
-                            <td>2022-07-14</td>
+                            <td>{{ number_format($detail->jumlah, 0, ',', '.') }} dos</td>
+                            <td>Rp {{ number_format($detail->harga_beli, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($detail->jumlah * $detail->harga_beli, 0, ',', '.') }}</td>
                         </tr>
                         @php
                         $total+=$detail->jumlah * $detail->harga_beli;
@@ -55,8 +53,7 @@
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td style="text-align:right">Total</td>
-                        <td>Rp. @php echo $total @endphp</td>
-                        <td>&nbsp;</td>
+                        <td>Rp @php echo number_format($total, 0, ',', '.') @endphp</td>
                     </tr>
 
                 </tbody>

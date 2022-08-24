@@ -33,8 +33,22 @@ class ProductSeeder extends Seeder
             [
                 'product_type_id' => 3,
                 'stok' => 150,
-                'harga_jual' => 30000,
-                'harga_modal' => 25000,   
+                'harga_jual' => 0,
+                'harga_modal' => 0,   
+                'keterangan' => 'keterangan parfum 3',
+            ],
+            [
+                'product_type_id' => 4,
+                'stok' => 0,
+                'harga_jual' => 0,
+                'harga_modal' => 0,   
+                'keterangan' => 'keterangan parfum 3',
+            ],
+            [
+                'product_type_id' => 5,
+                'stok' => 0,
+                'harga_jual' => 0,
+                'harga_modal' => 0,   
                 'keterangan' => 'keterangan parfum 3',
             ],
         ];
