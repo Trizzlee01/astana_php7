@@ -98,7 +98,7 @@
                         <tr>
                             <td>{{ $m->created_at->format('d/m/y H:m:s') }}</td>
                             <td>
-                                {{ $superadmins->where('id', $m->admin_id)->first()->firstname }} {{ $superadmins->where('id', $m->admin_id)->first()->lastname }}
+                                {{ $superadmins->where('id', $m->id_input)->first()->firstname }} {{ $superadmins->where('id', $m->id_input)->first()->lastname }}
                             </td>
                             <td>{{ $m->jumlah }} pcs</td>
                         </tr>

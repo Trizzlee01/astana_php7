@@ -16,24 +16,24 @@ class ProductTypeSeeder extends Seeder
     {
         $types = [
             [
-                'kode_produk' => 'P1',
-                'nama_produk' => 'Parfum 1',
+                'kode_produk' => 'PA_AM_6',
+                'nama_produk' => 'PARFUM ASTANA AQUA MAN 6 ML',
             ],
             [
-                'kode_produk' => 'P2',
-                'nama_produk' => 'Parfum 2',
+                'kode_produk' => 'PA_BR_6',
+                'nama_produk' => 'PARFUM ASTANA BRITISH ROSE 6 ML',
             ],
             [
-                'kode_produk' => 'P3',
-                'nama_produk' => 'Parfum 3',
+                'kode_produk' => 'PA_SB_6',
+                'nama_produk' => 'PARFUM ASTANA SUGAR BABY 6 ML',
             ],
             [
-                'kode_produk' => 'P4',
-                'nama_produk' => 'Parfum 4',
+                'kode_produk' => 'PA_AB_6',
+                'nama_produk' => 'PARFUM ASTANA ANGEL BLOSSOM 6 ML',
             ],
             [
-                'kode_produk' => 'P5',
-                'nama_produk' => 'Parfum 5',
+                'kode_produk' => 'PA_V_6',
+                'nama_produk' => 'PARFUM ASTANA VANILLA 6 ML',
             ],
         ];
 

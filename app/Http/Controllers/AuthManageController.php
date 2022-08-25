@@ -23,9 +23,20 @@ class AuthManageController extends Controller
 
     public function verifyLogin(Request $request)
     {
+        
         if(Auth::attempt($request->only('username', 'password'))){
-    		return redirect('/dashboard');
-    	}
+            // dd(auth()->user()->user_position != 'prospek_distributor');
+            if(auth()->user()->user_position == 'prospek_distributor')
+            {
+                // dd("b");
+                $this->logoutProcess();
+            }
+            else{
+                return redirect('/dashboard');
+            }
+        }
+        
+        
     	Session::flash('login_failed', 'Username atau password salah');
     	
     	return redirect('/login');

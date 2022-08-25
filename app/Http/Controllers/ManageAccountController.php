@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Models\Group;
 
 class ManageAccountController extends Controller
 {
@@ -82,7 +83,6 @@ class ManageAccountController extends Controller
                 'postcode' => 'required',
             ]);
             $validateData['id_group'] = auth()->user()->id_group;        
-
         }
         else
         {   
@@ -106,7 +106,11 @@ class ManageAccountController extends Controller
             }
             else
             {
-                $validateData['id_group'] = $validateData['username'];        
+                $groupdata['nama_group'] = $validateData['username'];
+                Group::create($groupdata);
+
+                // dd(Group::latest()->first());
+                $validateData['id_group'] = Group::latest()->first()->id;    
             }
 
             if($validateData['user_position'] == "superadmin_distributor")
@@ -117,12 +121,13 @@ class ManageAccountController extends Controller
 
         if($request->file('image'))
         {
-            $validateData['image'] = $request->file('image')->store('/public/manage_account/users');
+            $validateData['image'] = $request->file('image')->store('/manage_account/users');
         }
 
         $validateData['password'] = Hash::make($request->password);
 
         $validateData['id_input'] = auth()->user()->id;
+        $validateData['nama_input'] = auth()->user()->firstname . " " . auth()->user()->lastname;
 
         if(!$request->password)
         {
@@ -246,7 +251,7 @@ class ManageAccountController extends Controller
                 Storage::delete($request->oldImage);
             }
             // kalo ada gambar baru = hapus gambar lama lalu upload yg baru
-            $validateData['image'] = $request->file('image')->store('/public/manage_account/users');
+            $validateData['image'] = $request->file('image')->store('manage_account/users');
         }
 
         

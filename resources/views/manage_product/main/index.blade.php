@@ -29,12 +29,15 @@
                                     </button>
                                     <button type='button' class='btn btn-primary'><i class='fa fa-print'></i> Cetak</button>
                                 </div>
+                                
+                                @can('superadmin_pabrik')
                                 <div class="col-sm text-right">
                                     <button type="button" class="btn btn-primary"
-                                        onclick="location.href='{{ url('/manage_product/create_new_type/') }}'">
+                                        onclick="location.href='{{ url('/manage_product/products/create/') }}'">
                                         <span>+ Add</span>
                                     </button>
                                 </div>
+                                @endcan
                             </div>
                         </div>
                     </div><hr>
@@ -106,9 +109,11 @@
                                                             <td>Rp {{ number_format($product->stok * $product->harga_modal, 0, ',', '.') }}</td>
                                                             <td>{{ $product->keterangan }}</td>
                                                             <td><button class="btn btn-primary btn-sm" onclick="location.href='{{ url('/manage_product/products/'.$product->id) }}'"><i class="fa fa-eye"></button></td>
-                                                            <td><button type="button" class="btn btn-sm btn-warning" onclick="location.href='{{ url('/manage_product/edit_pusat/'.$product->id) }}'">
+                                                            @can('superadmin_pabrik')
+                                                                <td><button type="button" class="btn btn-sm btn-warning" onclick="location.href='{{ url('/manage_product/products/'.$product->id.'/edit') }}'">
                                                                     <span><i class="fa fa-edit"></i>Edit</span>
                                                                 </button></td>
+                                                            @endcan
                                                         </tr>
                                                     @endforeach
                                                     
@@ -151,6 +156,22 @@
 
 @section('script')
 <script>
+@if ($message = Session::get('create_success'))
+    swal(
+        "Berhasil!",
+        "{{ $message }}",
+        "success"
+    );
+@endif
+
+@if ($message = Session::get('update_success'))
+    swal(
+        "Berhasil!",
+        "{{ $message }}",
+        "success"
+    );
+@endif
+
 $(document).ready(function () {
         $('#myTable').DataTable({
             "order": [[ 3, "desc" ]]

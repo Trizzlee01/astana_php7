@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-sm text-right">
                     <button type="button" class="btn btn-primary"
-                        onclick="location.href='{{ url('/manage_product/products/create') }}'">
+                        onclick="location.href='{{ url('/manage_product/input_pasok/supplyhistories/create') }}'">
                         <span>+ Add</span>
                     </button>
                 </div>
@@ -74,12 +74,12 @@
                             <td>{{ $history->nama_supplier }}</td>
                             <td>Rp {{ number_format($history->total, 0, ',', '.') }}</td>
                             <td>
-                                {{ $superadmins->where('id', $history->admin_id)->first()->firstname }} {{ $superadmins->where('id', $history->admin_id)->first()->lastname }}
+                                {{ $superadmins->where('id', $history->id_input)->first()->firstname }} {{ $superadmins->where('id', $history->id_input)->first()->lastname }}
                             </td>
                             {{-- <td>{{ $history->created_at->format('d/m/y H:m:s') }}</td> --}}
                             <td>
                                 <div class="form-group text-left">
-                                    <button type="button" onclick='window.location.href="{{ url('/manage_product/detail_pasok/'.$history->kode_pasok) }}"' class="btn btn-primary">
+                                    <button type="button" onclick="window.location.href='{{ url('/manage_product/input_pasok/detail/'.$history->kode_pasok) }}'" class="btn btn-primary">
                                         <i class="fa fa-eye"></i>
                                     </button>
 
@@ -101,6 +101,13 @@
 
 @section('script')
 <script>
+@if ($message = Session::get('create_success'))
+    swal(
+        "Berhasil!",
+        "{{ $message }}",
+        "success"
+    );
+@endif
 // function nextpage() {
 //             var handlerid = 4;
 //             $.ajax({

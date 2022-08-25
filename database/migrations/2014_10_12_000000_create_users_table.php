@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('user_position');
-            $table->string('id_group');
+            $table->foreignId('id_group');
             $table->string('username')->unique();
             $table->string('image')->nullable();
             $table->string('password')->nullable();
@@ -26,18 +26,17 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->unsignedBigInteger('province_id');
             $table->unsignedBigInteger('city_id');
-            
-
             $table->string('address');
             $table->string('postcode');
             $table->rememberToken();
-            $table->integer('id_input');
             $table->string('cluster')->nullable();
             $table->string('tokopedia')->nullable();
             $table->string('shopee')->nullable();
             $table->string('lazada')->nullable();
             $table->string('bukalapak')->nullable();
             $table->string('blibli')->nullable();
+            $table->integer('id_input');
+            $table->string('nama_input');
             $table->timestamps();
         });
     }

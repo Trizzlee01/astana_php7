@@ -39,15 +39,16 @@
                     @endphp
                     @foreach($details as $detail)
                         <tr>
-                            <td>{{ $detail->product_type->kode_produk }}</td>
-                            <td>{{ $detail->product_type->nama_produk }}</td>
+                            {{-- <td>{{ $detail->product->product_type }}</td> --}}
+                            <td>{{ $detail->product->product_type->kode_produk }}</td>
+                            <td>{{ $detail->product->product_type->nama_produk }}</td>
                             <td>{{ number_format($detail->jumlah, 0, ',', '.') }} dos</td>
-                            <td>Rp {{ number_format($detail->harga_beli, 0, ',', '.') }}</td>
-                            <td>Rp {{ number_format($detail->harga_jual, 0, ',', '.') }}</td>
-                            <td>Rp {{ number_format($detail->jumlah * $detail->harga_beli, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($detail->product->harga_modal, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($detail->product->harga_jual, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($detail->jumlah * $detail->product->harga_modal, 0, ',', '.') }}</td>
                         </tr>
                         @php
-                        $total+=$detail->jumlah * $detail->harga_beli;
+                        $total+=$detail->jumlah * $detail->product->harga_modal;
                         @endphp
                     @endforeach
                     <tr>

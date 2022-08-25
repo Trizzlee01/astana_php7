@@ -156,16 +156,25 @@
                         <div class="col">
                             <a href="#kelolabarang" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Kelola Barang</a>
                             <ul class="collapse list-unstyled" id="kelolabarang">
-                                <li>
-                                    <a href="{{ url('/manage_product/pusat') }}">Daftar Barang Pusat</a>
-                                </li>
                                 @can('superadmin_pabrik')
+                                <li>
+                                    <a href="{{ url('/manage_product/products') }}">Daftar Barang Pusat</a>
+                                </li>
                                 <li>
                                     <a href="kelolaBarang_daftarBarangDistributor.php">Daftar Barang Distributor</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('/manage_product/products') }}">Input Pasok Barang</a>
+                                    <a href="{{ url('/manage_product/input_pasok/supplyhistories') }}">Input Pasok Barang</a>
                                 </li>
+                                @endcan
+
+                                @can('superadmin_distributor')
+                                    <li>
+                                        <a href="{{ url('/manage_product/products') }}">Daftar Barang Distributor</a>
+                                    </li>
+                                    <li>
+                                        <a href="kelolaBarang_daftarBarangDistributor.php">Daftar Barang Reseller</a>
+                                    </li>
                                 @endcan
                             </ul>
                         </div>

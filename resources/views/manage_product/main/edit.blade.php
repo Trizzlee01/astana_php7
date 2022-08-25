@@ -35,16 +35,27 @@
 
 @section('content')
 <div class="container justify text-center">
-    <form action="{{ url('/manage_product/update_pusat/'.$product->id) }}" method="post" name="create_form" enctype="multipart/form-data">
+    <form action="{{ url('/manage_product/products/'.$product->id) }}" method="post" name="create_form" enctype="multipart/form-data">
         @method('put')
         @csrf
+        <div class="form-group">
+            <div class="row">
+                <div class="col-2 text-align:left">
+                    <label class="text">Kode Barang</label>
+                </div>
+                <div class="col-10">
+                    <input type="text" class="form-control textField" id="kode_produk" name="kode_produk"
+                        placeholder="Masukkan Nama Barang" value="{{ $product->product_type->kode_produk }}">
+                </div>
+            </div>
+        </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-2 text-align:left">
                     <label class="text">Nama Barang</label>
                 </div>
                 <div class="col-10">
-                    <input type="text" class="form-control textField" id="namabarang" name="nama_produk"
+                    <input type="text" class="form-control textField" id="nama_produk" name="nama_produk"
                         placeholder="Masukkan Nama Barang" value="{{ $product->product_type->nama_produk }}">
                 </div>
             </div>
@@ -55,7 +66,7 @@
                     <label class="text">Stok Barang</label>
                 </div>
                 <div class="col-10">
-                    <input type="text" class="form-control textField" id="stokbarang" name="stok"
+                    <input type="text" class="form-control textField" id="stok" name="stok"
                         placeholder="Masukkan Stok Barang" value="{{ $product->stok }}">
                 </div>
             </div>
@@ -66,7 +77,7 @@
                     <label class="text">Harga Jual</label>
                 </div>
                 <div class="col-10">
-                    <input type="text" class="form-control textField" id="hargajual" name="harga_jual"
+                    <input type="text" class="form-control textField" id="harga_jual" name="harga_jual"
                         placeholder="Masukkan Harga Jual (per pcs)" value="{{ $product->harga_jual }}">
                 </div>
             </div>
@@ -77,12 +88,12 @@
                     <label class="text">Harga Modal</label>
                 </div>
                 <div class="col-10">
-                    <input type="text" class="form-control textField" id="hargamodal" name="harga_modal"
+                    <input type="text" class="form-control textField" id="harga_modal" name="harga_modal"
                         placeholder="Masukkan Harga Modal (per pcs)" value="{{ $product->harga_modal }}">
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        {{-- <div class="form-group">
             <div class="row">
                 <div class="col-2 text-align:left">
                     <label class="text">Keterangan</label>
@@ -92,10 +103,10 @@
                         placeholder="Masukkan Keterangan Barang" value="{{ $product->keterangan }}">
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="form-group text-right">
-            <input type="submit" onclick="" class="btn btn-primary submit" value="Edit">
+            <input type="submit" onclick="" class="btn btn-primary submit btn-simpan" value="Edit">
         </div>
     </form>
 </div>
@@ -103,16 +114,54 @@
 
 @section('script')
 <script>
-$(document).ready(function () {
-            var date_input = $('input[name="date"]'); //our date input has the name "date"
-            var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
-            var options = {
-                format: 'mm/dd/yyyy',
-                container: container,
-                todayHighlight: true,
-                autoclose: true,
-            };
-            date_input.datepicker(options);
-        });
+@if ($message = Session::get('update_failed'))
+    swal(
+        "",
+        "{{ $message }}",
+        "error"
+    );
+@endif
+
+$(document).ready(
+    function () {
+        $('#stok').val(formatRupiah(this.value));
+        $('#harga_jual').val(formatRupiah(this.value));
+        $('#harga_modal').val(formatRupiah(this.value));
+    }
+)
+
+
+$('#stok').keyup(function(e) {
+    $('#stok').val(formatRupiah(this.value));
+});
+$('#harga_jual').keyup(function(e) {
+    $('#harga_jual').val(formatRupiah(this.value));
+});
+$('#harga_modal').keyup(function(e) {
+    $('#harga_modal').val(formatRupiah(this.value));
+});
+
+function formatRupiah(angka, prefix){
+    var number_string = angka.replace(/[^,\d]/g, '').toString(),
+    split   		= number_string.split('.'),
+    sisa     		= split[0].length % 3,
+    rupiah     	= split[0].substr(0, sisa),
+    ribuan     	= split[0].substr(sisa).match(/\d{3}/gi);
+
+    // tambahkan titik jika yang di input sudah menjadi angka ribuan
+    if(ribuan){
+        separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+
+    rupiah = split[1] != undefined ? rupiah + '.' + split[1] : rupiah;
+    return prefix == undefined ? rupiah : (rupiah ? rupiah : '');
+}
+
+$(document).on('click', '.btn-simpan', function () {
+    $('#stok').val(parseInt($('#stok').val().replace(/,.*|[^0-9]/g, '')))
+    $('#harga_jual').val(parseInt($('#harga_jual').val().replace(/,.*|[^0-9]/g, '')))
+    $('#harga_modal').val(parseInt($('#harga_modal').val().replace(/,.*|[^0-9]/g, '')))
+})
 </script>
 @endsection

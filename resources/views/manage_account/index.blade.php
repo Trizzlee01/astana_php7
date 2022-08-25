@@ -100,8 +100,11 @@
                                                 </td>
                                                 @can('superadmin_pabrik')
                                                 <td>
+                                                    @if($superadmins->where('id', $user->id_input)->first())
                                                     {{ $superadmins->where('id', $user->id_input)->first()->firstname }} {{ $superadmins->where('id', $user->id_input)->first()->lastname }}
-                                                    {{-- {{ array_search($users->where('id', $user->id_input)->first(), array_keys($superadmins)) }} --}}
+                                                    @else
+                                                    {{ $user->nama_input }}
+                                                    @endif
                                                 </td>
                                                 @endcan
                                                 @can('superadmin_distributor')

@@ -196,6 +196,7 @@
                         <option value="accounting_pabrik">Accounting</option>
                         <option value="cashier_pabrik">Cashier</option>
                         <option value="superadmin_distributor">Distributor</option>
+                        <option value="prospek_distributor">Prospek Distributor</option>
                     </select>
                 </div>
                 
@@ -230,6 +231,7 @@
                         <option value="accounting_distributor">Accounting</option>
                         <option value="cashier_distributor">Cashier</option>
                         <option value="reseller">Reseller</option>
+                        <option value="prospek_reseller">Prospek Reseller</option>
                     </select>
                 </div>
                 
