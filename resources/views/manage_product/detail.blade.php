@@ -29,6 +29,7 @@
                         <th scope="col">Nama barang</th>
                         <th scope="col">Jumlah</th>
                         <th scope="col">Harga Beli</th>
+                        <th scope="col">Harga Jual</th>
                         <th scope="col">Subtotal</th>
                     </tr>
                 </thead>
@@ -42,6 +43,7 @@
                             <td>{{ $detail->product_type->nama_produk }}</td>
                             <td>{{ number_format($detail->jumlah, 0, ',', '.') }} dos</td>
                             <td>Rp {{ number_format($detail->harga_beli, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($detail->harga_jual, 0, ',', '.') }}</td>
                             <td>Rp {{ number_format($detail->jumlah * $detail->harga_beli, 0, ',', '.') }}</td>
                         </tr>
                         @php
@@ -49,6 +51,7 @@
                         @endphp
                     @endforeach
                     <tr>
+                        <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>

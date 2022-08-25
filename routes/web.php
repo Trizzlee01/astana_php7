@@ -43,6 +43,9 @@ Route::middleware('auth', 'checkRole:superadmin_pabrik,superadmin_distributor,re
     Route::resource('/manage_product/products', 'App\Http\Controllers\ProductManageController');
     Route::get('manage_product/detail_pasok/{product_history}', 'App\Http\Controllers\ProductManageController@detailPasok');
     Route::get('/manage_product/pusat', 'App\Http\Controllers\ProductManageController@indexPusat');
+    Route::get('/manage_product/edit_pusat/{product}', 'App\Http\Controllers\ProductManageController@editPusat');
+    Route::put('/manage_product/update_pusat/{product}', 'App\Http\Controllers\ProductManageController@updatePusat');
+    Route::get('/manage_product/create_new_type/', 'App\Http\Controllers\ProductManageController@createType');
 });
 
 

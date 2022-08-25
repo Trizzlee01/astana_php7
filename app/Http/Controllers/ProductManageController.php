@@ -40,6 +40,11 @@ class ProductManageController extends Controller
         return view('manage_product.create', ['types' => ProductType::all()]);
     }
 
+    public function createType()
+    {
+        return view('manage_product.create_type');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -112,8 +117,20 @@ class ProductManageController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        // dd("a");
+        // return view('manage_product.edit_pusat', ['product' => $product]);
     }
+
+    public function editPusat(Product $product)
+    {
+        // dd("a");
+        return view('manage_product.edit_pusat', ['product' => $product]);
+    }
+
+    // public function editPusat($id_product)
+    // {
+    //     return view('manage_product.edit_pusat', [Product::where('id', $id_product)]);
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -124,7 +141,24 @@ class ProductManageController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        
+    }
+
+    public function updatePusat(Request $request, Product $product)
+    {
+        // dd($request, $product);
+
+        $validateData['stok'] = (int)$request->input("stok");
+        $validateData['harga_jual'] = (int)$request->input("harga_jual");
+        $validateData['harga_modal'] = (int)$request->input("harga_modal");
+        $validateData['keterangan'] = $request->keterangan;
+        
+
+        Product::where('id', $product->id)->update($validateData);
+
+        ProductType::where('id', $product->product_type_id)->update(array('nama_produk' => $request->nama_produk));
+        
+        return redirect('/manage_product/pusat');
     }
 
     /**
