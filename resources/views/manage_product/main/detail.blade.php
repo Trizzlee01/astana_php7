@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row d-flex align-items-center">
             <div class="col-sm-4" style="text-align:left;">
-                <h4 style="text-align:left;">Parfum varian 1</h4>
+                <h4 style="text-align:left;">{{ $product->product_type->nama_produk }}</h4>
             </div>
             <div class="col-sm" style="text-align:left;">
                 <button type="button" class="btn btn-success">
@@ -99,6 +99,7 @@
                             <td>{{ $m->created_at->format('d/m/y H:m:s') }}</td>
                             <td>
                                 {{ $superadmins->where('id', $m->id_input)->first()->firstname }} {{ $superadmins->where('id', $m->id_input)->first()->lastname }}
+                                {{-- {{ $superadmins->where('id', $m->id_input)->first()->firstname }} {{ $superadmins->where('id', $m->id_input)->first()->lastname }} --}}
                             </td>
                             <td>{{ $m->jumlah }} pcs</td>
                         </tr>

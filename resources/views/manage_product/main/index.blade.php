@@ -16,7 +16,15 @@
                         <div class="container">
                             <div class="row d-flex align-items-center">
                                 <div class="col-sm-4" style="text-align:left;">
+                                    @can('superadmin_pabrik')
                                     <h4 style="text-align:left;">Daftar Barang Pusat</h4>
+                                    @endcan
+                                    @can('superadmin_distributor')
+                                    <h4 style="text-align:left;">Daftar Barang Distributor</h4>
+                                    @endcan
+                                    @can('reseller')
+                                    <h4 style="text-align:left;">Daftar Barang Reseller</h4>
+                                    @endcan
                                 </div>
                                 <div class="col-sm" style="text-align:left;">
                                     <button type="button" class="btn btn-success">
@@ -109,11 +117,11 @@
                                                             <td>Rp {{ number_format($product->stok * $product->harga_modal, 0, ',', '.') }}</td>
                                                             <td>{{ $product->keterangan }}</td>
                                                             <td><button class="btn btn-primary btn-sm" onclick="location.href='{{ url('/manage_product/products/'.$product->id) }}'"><i class="fa fa-eye"></button></td>
-                                                            @can('superadmin_pabrik')
+                                                            {{-- @can('superadmin_pabrik') --}}
                                                                 <td><button type="button" class="btn btn-sm btn-warning" onclick="location.href='{{ url('/manage_product/products/'.$product->id.'/edit') }}'">
                                                                     <span><i class="fa fa-edit"></i>Edit</span>
                                                                 </button></td>
-                                                            @endcan
+                                                            {{-- @endcan --}}
                                                         </tr>
                                                     @endforeach
                                                     

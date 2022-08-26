@@ -18,6 +18,10 @@ class Product extends Model
         return $this->belongsTo(Group::class, 'id_group');
     }
 
+    public function owner(){
+        return $this->belongsTo(User::class, 'id_owner');
+    }
+
     public function supply_histories()
     {
         return $this->hasMany(SupplyHistory::class);

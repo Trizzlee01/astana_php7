@@ -33,5 +33,9 @@ class AppServiceProvider extends ServiceProvider
             return $user->user_position === 'superadmin_distributor';
         });
 
+        Gate::define('reseller', function(User $user) {
+            return $user->user_position === 'reseller';
+        });
+
     }
 }

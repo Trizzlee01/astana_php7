@@ -122,7 +122,7 @@
                         </div>
                     </div>
                 </li>
-        
+{{-- KELOLA AKUN --}}
                 @canany(['superadmin_pabrik','superadmin_distributor'])
                 <li class="list-group-item">
                     <div class="row">
@@ -146,7 +146,7 @@
                     </div>
                 </li>
                 @endcan
-
+{{-- KELOLA BARANG --}}
                 @canany(['superadmin_pabrik','superadmin_distributor'])
                 <li class="list-group-item">
                     <div class="row">
@@ -161,7 +161,7 @@
                                     <a href="{{ url('/manage_product/products') }}">Daftar Barang Pusat</a>
                                 </li>
                                 <li>
-                                    <a href="kelolaBarang_daftarBarangDistributor.php">Daftar Barang Distributor</a>
+                                    <a href="{{ url('/manage_product/distributor/products') }}">Daftar Barang Distributor</a>
                                 </li>
                                 <li>
                                     <a href="{{ url('/manage_product/input_pasok/supplyhistories') }}">Input Pasok Barang</a>
@@ -173,15 +173,29 @@
                                         <a href="{{ url('/manage_product/products') }}">Daftar Barang Distributor</a>
                                     </li>
                                     <li>
-                                        <a href="kelolaBarang_daftarBarangDistributor.php">Daftar Barang Reseller</a>
+                                        <a href="{{ url('/manage_product/reseller/products') }}">Daftar Barang Reseller</a>
                                     </li>
                                 @endcan
+
                             </ul>
                         </div>
                     </div>
                 </li>
                 @endcan
         
+                @can('reseller')
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-2 align-self-center">
+                            <img src="{{ asset('images/templates/main/kelola barang.png') }}" style="height:16px;width:16px;" class="invert">
+                        </div>
+                        <div class="col">
+                            <a href="{{ url('/manage_product/products') }}">Kelola Barang</a>
+                        </div>
+                    </div>
+                </li>
+                @endcan
+{{-- RESELLER --}}
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col-2 align-self-center">

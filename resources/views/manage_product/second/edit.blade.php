@@ -35,7 +35,7 @@
 
 @section('content')
 <div class="container justify text-center">
-    <form action="{{ url('/manage_product/products/'.$product->id) }}" method="post" name="create_form" enctype="multipart/form-data">
+    <form action="{{ url('manage_product/distributor/products/update/'.$product->id) }}" method="post" name="create_form" enctype="multipart/form-data">
         @method('put')
         @csrf
         <div class="form-group">
@@ -45,11 +45,7 @@
                 </div>
                 <div class="col-10">
                     <input type="text" class="form-control textField" id="kode_produk" name="kode_produk"
-                        placeholder="Masukkan Nama Barang" value="{{ $product->product_type->kode_produk }}"
-                        @canany(['superadmin_distributor','reseller'])
-                            readonly
-                        @endcan
-                        >
+                        placeholder="Masukkan Nama Barang" value="{{ $product->product_type->kode_produk }}" readonly>
                 </div>
             </div>
         </div>
@@ -60,11 +56,7 @@
                 </div>
                 <div class="col-10">
                     <input type="text" class="form-control textField" id="nama_produk" name="nama_produk"
-                        placeholder="Masukkan Nama Barang" value="{{ $product->product_type->nama_produk }}"
-                        @canany(['superadmin_distributor','reseller'])
-                            readonly
-                        @endcan
-                        >
+                        placeholder="Masukkan Nama Barang" value="{{ $product->product_type->nama_produk }}" readonly>
                 </div>
             </div>
         </div>
@@ -75,11 +67,7 @@
                 </div>
                 <div class="col-10">
                     <input type="text" class="form-control textField" id="stok" name="stok"
-                        placeholder="Masukkan Stok Barang" value="{{ $product->stok }}"
-                        @canany(['superadmin_distributor','reseller'])
-                            readonly
-                        @endcan
-                        >
+                        placeholder="Masukkan Stok Barang" value="{{ $product->stok }}">
                 </div>
             </div>
         </div>
@@ -101,11 +89,7 @@
                 </div>
                 <div class="col-10">
                     <input type="text" class="form-control textField" id="harga_modal" name="harga_modal"
-                        placeholder="Masukkan Harga Modal (per pcs)" value="{{ $product->harga_modal }}"
-                        @canany(['superadmin_distributor','reseller'])
-                            readonly
-                        @endcan
-                        >
+                        placeholder="Masukkan Harga Modal (per pcs)" value="{{ $product->harga_modal }}" readonly>
                 </div>
             </div>
         </div>

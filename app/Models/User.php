@@ -48,5 +48,9 @@ class User extends Authenticatable
         return $this->belongsTo(Group::class, 'id_group');
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
     
 }

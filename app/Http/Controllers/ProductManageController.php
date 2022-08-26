@@ -19,12 +19,36 @@ class ProductManageController extends Controller
      */
     public function index()
     {
-        // dd(auth()->user()->group->nama_group);
-        // if(auth()->user()->group->nama_group == 'pusat')
-        // {
-        //     return view('manage_product.main.index', ['products' => Product::where('id_group', auth()->user()->id_group)->get()]);
-        // }
-        return view('manage_product.main.index', ['products' => Product::where('id_group', auth()->user()->id_group)->get()]);
+        // dd(Product::join('users', 'users.id', '=', 'products.id_owner')->where('id_group', auth()->user()->id_group)->where('user_position', auth()->user()->user_position)->get());
+        
+        // untuk user superadmin_pabrik, superadmin_distributor, reseller
+        // dd(Product::join('users', 'users.id', '=', 'products.id_owner')->where('products.id_group', auth()->user()->id_group)->where('user_position', auth()->user()->user_position)->get());
+        if(auth()->user()->user_position == "superadmin_pabrik" || auth()->user()->user_position == "superadmin_distributor")
+        {
+            return view('manage_product.main.index', ['products' => Product::join('users', 'users.id', '=', 'products.id_owner')->where('products.id_group', auth()->user()->id_group)->where('user_position', auth()->user()->user_position)->select('products.*')->get()]);
+        }
+        else if(auth()->user()->user_position == "reseller")
+        {
+            return view('manage_product.main.index', ['products' => Product::join('users', 'users.id', '=', 'products.id_owner')->where('products.id_owner', auth()->user()->id)->select('products.*')->get()]);
+        }
+    }
+
+    public function indexSecond()
+    {
+        if(auth()->user()->user_position == "superadmin_pabrik")
+        {
+            // dd(Product::join('users', 'users.id', '=', 'products.id_owner')->where('products.id_group', '!=', auth()->user()->id_group)->where('users.user_position', "superadmin_distributor")->orderBy('products.id_group', 'ASC')->orderBy('products.id_productType', 'ASC')->get());
+            return view('manage_product.second.index', ['products' => Product::join('users', 'users.id', '=', 'products.id_owner')->where('products.id_group', '!=', auth()->user()->id_group)->where('users.user_position', "superadmin_distributor")->orderBy('products.id_group', 'ASC')->orderBy('products.id_productType', 'ASC')->select('products.*')->get()]);
+        }
+        else if(auth()->user()->user_position == "superadmin_distributor")
+        {
+            return view('manage_product.second.index', ['products' => Product::join('users', 'users.id', '=', 'products.id_owner')->where('products.id_group', auth()->user()->id_group)->where('users.user_position', "reseller")->orderBy('products.id_owner', 'ASC')->orderBy('products.id_productType', 'ASC')->select('products.*')->get()]);
+        }
+        else
+        {
+            return back();
+        }
+        // return view('manage_product.second.index', ['products' => Product::where('id_group', '!=', auth()->user()->id_group)->orderBy('id_group', 'ASC')->orderBy('id_productType', 'ASC')->get()]);
 
     }
 
@@ -43,10 +67,6 @@ class ProductManageController extends Controller
         // return view('manage_product.create', ['types' => ProductType::all()]);
     }
 
-    // public function createType()
-    // {
-    //     return view('manage_product.create_type');
-    // }
 
     /**
      * Store a newly created resource in storage.
@@ -72,8 +92,13 @@ class ProductManageController extends Controller
             $groups = Product::groupBy('id_group')->get();
             foreach($groups as $group)
             {
-                $newProduct['id_productType'] = ProductType::latest()->first()->id;;
+                $newProduct['id_productType'] = ProductType::latest()->first()->id;
                 $newProduct['id_group'] = $group->id_group;
+
+                $owner = User::where('id_group', $group->id_group)->first();
+                $newProduct['id_owner'] = $owner->id;
+
+// CREATE NEW PRODUCT PUSAT
                 if($group->group->nama_group == "pusat")
                 {
                     $newProduct['stok'] = $request->stok;
@@ -88,18 +113,39 @@ class ProductManageController extends Controller
                         $newProduct['keterangan'] = 'Tersedia';
                     }
                 }
-                else
+// CREATE NEW PRODUCT DISTRIBUTOR, HARGA MODAL = HARGA JUAL PUSAT
+                else if($owner->user_position == "superadmin_distributor")
                 {
                     $newProduct['stok'] = 0;
                     $newProduct['harga_jual'] = 0;
-                    $newProduct['harga_modal'] = 0;
+                    $newProduct['harga_modal'] = $request->harga_jual;
                     $newProduct['keterangan'] = 'Kosong';
+
+                    
                 }
 
                 Product::create($newProduct);
-                // Session::flash('create_failed', 'Berhasil'); 
 
+                $resellers = User::where('id_group', $owner->id_group)->where('user_position', 'reseller')->get();
+                // dd($resellers);
+
+// CREATE NEW PRODUCT RESELLER, HARGA MODAL = 0
+                foreach($resellers as $reseller)
+                {
+                    $newProductReseller['id_productType'] = ProductType::latest()->first()->id;
+                    $newProductReseller['id_group'] = $owner->id_group;
+                    $newProductReseller['id_owner'] = $reseller->id;
+                    $newProductReseller['stok'] = 0;
+                    $newProductReseller['harga_jual'] = 0;
+                    $newProductReseller['harga_modal'] = 0;
+                    $newProductReseller['keterangan'] = 'Kosong';
+
+                    Product::create($newProductReseller);
+                }
+                // Session::flash('create_failed', 'Berhasil'); 
             }
+
+            
             // Session::flash('create_failed', 'aaaa'); 
             Session::flash('create_success', 'Barang baru berhasil ditambahkan');
             return redirect('/manage_product/products');
@@ -113,36 +159,6 @@ class ProductManageController extends Controller
         
     }
 
-    // public function storeHistory(Request $request)
-    // {
-    //     $validateData = $request->validate([
-    //         'kode_pasok' => 'required',
-    //         'surat_jalan' => 'required',
-    //         'tanggal_surat' => 'required',
-    //     ]);
-        
-    //     $validateData['nama_supplier'] = 'pabrik astana';
-    //     $validateData['tanggal_surat'] = date('Y-m-d', strtotime($request->input('tanggal_surat')));
-    //     $validateData['admin_id'] = auth()->user()->id;
-
-    //     for ($i = 1; $i <= 5; $i++)
-    //     {
-    //         if($request->input("check".$i) && $request->input("jumlah".$i) && $request->input("harga_beli".$i))
-    //         {
-    //             $validateData['product_type_id'] = $i;
-    //             $validateData['jumlah'] = (int)$request->input("jumlah".$i);
-    //             $validateData['harga_beli'] = (int)$request->input("harga_beli".$i);
-                
-    //             ProductHistory::create($validateData);
-
-    //             $stok = Product::where('id', $i)->first();
-    //             $updateStok = $stok->stok + $validateData['jumlah'];
-    //             Product::where('id', $i)->update(array('stok' => $updateStok));
-    //         }
-    //     }
-
-    //     return redirect('/manage_product/products')->with('success', 'Penambahan pasok berhasil!!');
-    // }
 
     /**
      * Display the specified resource.
@@ -152,16 +168,16 @@ class ProductManageController extends Controller
      */
     public function show(Product $product)
     {
-        // dd(ProductHistory::where('product_type_id',$product->product_type_id)->get());
-        return view('manage_product.main.detail', ['masuk' => SupplyHistory::where('id_product',$product->id)->get()], ['superadmins' => User::where('user_position', 'superadmin_pabrik')->get()]);
+        // dd(User::where('user_position', 'superadmin_pabrik')->get());
+
+        // return view('manage_product.main.detail', ['product' => $product], ['masuk' => SupplyHistory::where('id_product',$product->id)->get()], ['superadmins' => User::where('user_position', 'superadmin_pabrik')->get()]);
+        
+        $masuk = SupplyHistory::where('id_product',$product->id)->get();
+        $superadmins = User::where('user_position', 'superadmin_pabrik')->get();
+        return view('manage_product.main.detail', compact(['product', 'masuk', 'superadmins']));
     }
 
-    // public function detailPasok($kode_pasok)
-    // {
-    //     // dd($kode_pasok);
-    //     // dd(ProductHistory::where('kode_pasok',$kode_pasok)->get());
-    //     return view('manage_product.detail', ['details' => ProductHistory::where('kode_pasok',$kode_pasok)->get()]);
-    // }
+   
 
     /**
      * Show the form for editing the specified resource.
@@ -175,16 +191,19 @@ class ProductManageController extends Controller
         return view('manage_product.main.edit', ['product' => $product]);
     }
 
-    public function editPusat(Product $product)
+    public function editSecond($product)
     {
-        // dd("a");
-        return view('manage_product.edit_pusat', ['product' => $product]);
+        // dd($product);
+        return view('manage_product.second.edit', ['product' => Product::where('id', $product)->first()]);
     }
 
-    // public function editPusat($id_product)
+    // public function editPusat(Product $product)
     // {
-    //     return view('manage_product.edit_pusat', [Product::where('id', $id_product)]);
+    //     // dd("a");
+    //     return view('manage_product.edit_pusat', ['product' => $product]);
     // }
+
+    
 
     /**
      * Update the specified resource in storage.
@@ -196,21 +215,94 @@ class ProductManageController extends Controller
     public function update(Request $request, Product $product)
     {
         // dd($request);
-        $checkType = ProductType::where('kode_produk', $request->kode_produk)->count();
-        // dd($request->kode_produk);
-        // dd($product->product_type->kode_produk);
-        if($request->kode_produk == $product->product_type->kode_produk)
+        if(auth()->user()->user_position == "superadmin_pabrik")
         {
-            // dd("masuk");
-            $checkType = 0;
+            $checkType = ProductType::where('kode_produk', $request->kode_produk)->count();
+            if($request->kode_produk == $product->product_type->kode_produk)
+            {
+                $checkType = 0;
+            }
+            if($checkType == 0)
+            {
+                $validateData['stok'] = (int)$request->input("stok");
+                $validateData['harga_jual'] = (int)$request->input("harga_jual");
+                $validateData['harga_modal'] = (int)$request->input("harga_modal");
+                $validateData['keterangan'] = $request->keterangan;
+                
+                if($request->stok == null || $request->stok == 0)
+                {
+                    $validateData['keterangan'] = 'Kosong';
+                }
+                else
+                {
+                    $validateData['keterangan'] = 'Tersedia';
+                }
+    
+// PERUBAHAN HARGA JUAL PUSAT -> HARGA MODAL DISTRIBUTOR BERUBAH
+                if(Product::where('id', $product->id)->first()->harga_jual != $validateData['harga_jual'])
+                {
+                    // dd("perubahan harga jual");
+                    $productDistributors = Product::join('users', 'users.id', '=', 'products.id_owner')->where('id_productType', $product->id_productType)->where('users.user_position', 'superadmin_distributor')->select('products.*')->get();
+                    // dd($productDistributor);
+                    foreach($productDistributors as $productDistributor)
+                    {
+                        $productDistributor->update(array('harga_modal' => $validateData['harga_jual']));
+                    }
+                }
+        
+                Product::where('id', $product->id)->update($validateData);
+        
+                ProductType::where('id', $product->id_productType)->update(array('nama_produk' => $request->nama_produk));
+                ProductType::where('id', $product->id_productType)->update(array('kode_produk' => $request->kode_produk));
+                
+                Session::flash('update_success', 'Barang berhasil diedit');
+                return redirect('/manage_product/products');
+            }
+            Session::flash('update_failed', 'Kode barang telah digunakan'); 
+            return back();
         }
-        if($checkType == 0)
+        else if(auth()->user()->user_position == "superadmin_distributor")
+        {
+            // dd("edit distributor");
+            $validateData['harga_jual'] = $request->harga_jual;
+// PERUBAHAN HARGA JUAL DISTRIBUTOR -> HARGA MODAL RESELLER BERUBAH
+            if(Product::where('id', $product->id)->first()->harga_jual != $validateData['harga_jual'])
+            {
+                // dd("perubahan harga jual");
+                $productDistributor = Product::where('id', $product->id)->first();
+                $productResellers = Product::join('users', 'users.id', '=', 'products.id_owner')->where('products.id_group', $productDistributor->id_group)->where('id_productType', $product->id_productType)->where('users.user_position', 'reseller')->select('products.*')->get();
+                // dd($productDistributor);
+                foreach($productResellers as $productReseller)
+                {
+                    $productReseller->update(array('harga_modal' => $validateData['harga_jual']));
+                }
+            }
+            Product::where('id', $product->id)->update($validateData);
+            Session::flash('update_success', 'Barang berhasil diedit');
+            return redirect('/manage_product/products');
+        }
+        else if(auth()->user()->user_position == "reseller")
+        {
+            // dd("reseller");
+            $validateData['harga_jual'] = $request->harga_jual;
+            Product::where('id', $product->id)->update($validateData);
+            Session::flash('update_success', 'Barang berhasil diedit');
+            return redirect('/manage_product/products');
+        }
+
+        return back();
+    }
+
+    public function updateSecond(Request $request, $product)
+    {
+        // dd($product);
+
+        if(auth()->user()->user_position == "superadmin_pabrik")
         {
             $validateData['stok'] = (int)$request->input("stok");
             $validateData['harga_jual'] = (int)$request->input("harga_jual");
-            $validateData['harga_modal'] = (int)$request->input("harga_modal");
             $validateData['keterangan'] = $request->keterangan;
-            
+    
             if($request->stok == null || $request->stok == 0)
             {
                 $validateData['keterangan'] = 'Kosong';
@@ -220,34 +312,65 @@ class ProductManageController extends Controller
                 $validateData['keterangan'] = 'Tersedia';
             }
     
-            Product::where('id', $product->id)->update($validateData);
     
-            ProductType::where('id', $product->id_productType)->update(array('nama_produk' => $request->nama_produk));
-            ProductType::where('id', $product->id_productType)->update(array('kode_produk' => $request->kode_produk));
-            
-            Session::flash('update_success', 'Barang berhasil diedit');
-            return redirect('/manage_product/products');
+// PERUBAHAN HARGA JUAL DISTRIBUTOR -> HARGA MODAL RESELLER BERUBAH
+            if(Product::where('id', $product)->first()->harga_jual != $validateData['harga_jual'])
+            {
+                // dd("perubahan harga jual");
+                $productDistributor = Product::where('id', $product)->first();
+                $productResellers = Product::join('users', 'users.id', '=', 'products.id_owner')->where('products.id_group',$productDistributor->id_group)->where('id_productType', $productDistributor->id_productType)->where('users.user_position', 'reseller')->select('products.*')->get();
+                // dd($productResellers);
+                foreach($productResellers as $productReseller)
+                {
+                    $productReseller->update(array('harga_modal' => $validateData['harga_jual']));
+                }
+            }
+    
+            Product::where('id', $product)->update($validateData);
+    
+            Session::flash('update_success', 'Barang distributor berhasil diedit');
+            return redirect('/manage_product/distributor/products');
         }
-        Session::flash('update_failed', 'Kode barang telah digunakan'); 
+        else if (auth()->user()->user_position == "superadmin_distributor")
+        {
+            // dd("edit reseller");
+            $validateData['stok'] = (int)$request->input("stok");
+            $validateData['harga_jual'] = (int)$request->input("harga_jual");
+            $validateData['keterangan'] = $request->keterangan;
+    
+            if($request->stok == null || $request->stok == 0)
+            {
+                $validateData['keterangan'] = 'Kosong';
+            }
+            else
+            {
+                $validateData['keterangan'] = 'Tersedia';
+            }
+
+            Product::where('id', $product)->update($validateData);
+            Session::flash('update_success', 'Barang reseller berhasil diedit');
+            return redirect('/manage_product/reseller/products');
+        }
         return back();
+        
     }
 
-    public function updatePusat(Request $request, Product $product)
-    {
-        // dd($request, $product);
+    // public function updatePusat(Request $request, Product $product)
+    // {
+    //     // dd($request, $product);
 
-        $validateData['stok'] = (int)$request->input("stok");
-        $validateData['harga_jual'] = (int)$request->input("harga_jual");
-        $validateData['harga_modal'] = (int)$request->input("harga_modal");
-        $validateData['keterangan'] = $request->keterangan;
+    //     $validateData['stok'] = (int)$request->input("stok");
+    //     $validateData['harga_jual'] = (int)$request->input("harga_jual");
+    //     $validateData['harga_modal'] = (int)$request->input("harga_modal");
+    //     $validateData['keterangan'] = $request->keterangan;
         
 
-        Product::where('id', $product->id)->update($validateData);
+    //     Product::where('id', $product->id)->update($validateData);
 
-        ProductType::where('id', $product->product_type_id)->update(array('nama_produk' => $request->nama_produk));
+    //     ProductType::where('id', $product->product_type_id)->update(array('nama_produk' => $request->nama_produk));
         
-        return redirect('/manage_product/pusat');
-    }
+    //     return redirect('/manage_product/pusat');
+    // }
 
     /**
      * Remove the specified resource from storage.

@@ -41,12 +41,10 @@ Route::middleware('auth', 'checkRole:superadmin_pabrik,superadmin_distributor')-
 
 Route::middleware('auth', 'checkRole:superadmin_pabrik,superadmin_distributor,reseller')->group(function(){
     Route::resource('/manage_product/products', 'App\Http\Controllers\ProductManageController');
-    
-    // Route::get('manage_product/detail_pasok/{product_history}', 'App\Http\Controllers\ProductManageController@detailPasok');
-    // Route::get('/manage_product/pusat', 'App\Http\Controllers\ProductManageController@indexPusat');
-    // Route::get('/manage_product/edit_pusat/{product}', 'App\Http\Controllers\ProductManageController@editPusat');
-    // Route::put('/manage_product/update_pusat/{product}', 'App\Http\Controllers\ProductManageController@updatePusat');
-    // Route::get('/manage_product/create_new_type/', 'App\Http\Controllers\ProductManageController@createType');
+    Route::get('/manage_product/distributor/products', 'App\Http\Controllers\ProductManageController@indexSecond');
+    Route::get('/manage_product/reseller/products', 'App\Http\Controllers\ProductManageController@indexSecond');
+    Route::get('/manage_product/distributor/products/edit/{product}', 'App\Http\Controllers\ProductManageController@editSecond');
+    Route::put('/manage_product/distributor/products/update/{product}', 'App\Http\Controllers\ProductManageController@updateSecond');
 });
 
 

@@ -17,6 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->foreignId('id_productType');
             $table->foreignId('id_group');
+            $table->foreignId('id_owner');
             $table->integer('stok');
             $table->integer('harga_jual');
             $table->integer('harga_modal');
