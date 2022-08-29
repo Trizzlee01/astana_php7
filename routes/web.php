@@ -30,7 +30,8 @@ use App\Http\Controllers\ManageAccountController;
 Route::get('/', 'App\Http\Controllers\AuthManageController@viewLogin')->middleware('guest');
 Route::get('/login', 'App\Http\Controllers\AuthManageController@viewLogin')->name('login')->middleware('guest');
 Route::post('/verify_login', 'App\Http\Controllers\AuthManageController@verifyLogin')->middleware('guest');
-Route::post('/logout', 'App\Http\Controllers\AuthManageController@logoutProcess');
+// Route::post('/logout', 'App\Http\Controllers\AuthManageController@logoutProcess');
+Route::get('/logout', 'App\Http\Controllers\AuthManageController@logoutProcess');
 
 Route::get('/dashboard', 'App\Http\Controllers\DashboardManageController@viewDashboard')->middleware('auth');
 
@@ -40,11 +41,17 @@ Route::middleware('auth', 'checkRole:superadmin_pabrik,superadmin_distributor')-
 });
 
 Route::middleware('auth', 'checkRole:superadmin_pabrik,superadmin_distributor,reseller')->group(function(){
+    // MAIN
     Route::resource('/manage_product/products', 'App\Http\Controllers\ProductManageController');
+    // SECOND
     Route::get('/manage_product/distributor/products', 'App\Http\Controllers\ProductManageController@indexSecond');
     Route::get('/manage_product/reseller/products', 'App\Http\Controllers\ProductManageController@indexSecond');
     Route::get('/manage_product/distributor/products/edit/{product}', 'App\Http\Controllers\ProductManageController@editSecond');
     Route::put('/manage_product/distributor/products/update/{product}', 'App\Http\Controllers\ProductManageController@updateSecond');
+    // THIRD
+    Route::get('/manage_product/distributor_reseller/products', 'App\Http\Controllers\ProductManageController@indexThird');
+    Route::get('/manage_product/distributor_reseller/products/{user}', 'App\Http\Controllers\ProductManageController@showThird');
+    Route::get('/manage_product/distributor_reseller/products/chart/{user}', 'App\Http\Controllers\ProductManageController@chartThird');
 });
 
 

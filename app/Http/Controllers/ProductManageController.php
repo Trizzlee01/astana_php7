@@ -49,7 +49,16 @@ class ProductManageController extends Controller
             return back();
         }
         // return view('manage_product.second.index', ['products' => Product::where('id_group', '!=', auth()->user()->id_group)->orderBy('id_group', 'ASC')->orderBy('id_productType', 'ASC')->get()]);
+    }
 
+    public function indexThird()
+    {
+        if(auth()->user()->user_position == "superadmin_pabrik")
+        {
+            $distributors = User::where('user_position', 'superadmin_distributor')->get();
+            // dd($distributors);
+            return view('manage_product.third.index', compact('distributors'));
+        }
     }
 
     /**
@@ -177,8 +186,28 @@ class ProductManageController extends Controller
         return view('manage_product.main.detail', compact(['product', 'masuk', 'superadmins']));
     }
 
-   
+    public function showThird($user)
+    {
+        // dd($user);
+        if(auth()->user()->user_position == "superadmin_pabrik")
+        {
+            $distributor = User::where('id', $user)->first();
+            $resellers = User::join('products', 'products.id_owner', '=', 'users.id')->where('users.id_group', $distributor->id_group)->where('user_position', 'reseller')->groupBy('products.id_owner')->select('users.*')->selectRaw('sum(stok) as stock')->get();
+            $stock = Product::where('id_owner', $user)->sum('stok');
+            $totalReseller = $resellers->count();
+            // dd($resellers);
+            return view('manage_product.third.detail', compact(['distributor', 'resellers', 'stock', 'totalReseller']));
+        }
+        return back();
+    }
 
+    public function chartThird($user)
+    {
+        // dd($user);
+        $products = Product::where('id_owner', $user)->get();
+        $types = ProductType::all();
+        return view('manage_product.third.chart', compact(['products', 'types']));
+    }
     /**
      * Show the form for editing the specified resource.
      *

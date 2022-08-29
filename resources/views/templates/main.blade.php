@@ -164,6 +164,9 @@
                                     <a href="{{ url('/manage_product/distributor/products') }}">Daftar Barang Distributor</a>
                                 </li>
                                 <li>
+                                    <a href="{{ url('/manage_product/distributor_reseller/products') }}">Daftar Barang Reseller</a>
+                                </li>
+                                <li>
                                     <a href="{{ url('/manage_product/input_pasok/supplyhistories') }}">Input Pasok Barang</a>
                                 </li>
                                 @endcan
@@ -364,45 +367,16 @@
                         </div>
                     </div>
                 </li>
-        
-                <form action="{{ url('/logout') }}" method="post">
-                    @csrf
+                <li class="list-group-item">
                     <div class="row">
-                        <button type="submit" class="col">Logout</button>
+                        <div class="col-2 align-self-center">	
+                            <i class="fa fa-door-open" style="color:#e86969"></i>
+                        </div>
+                        <div class="col">
+                            <a href="{{ url('/logout') }}" style="color:#e86969">Log Out</a>
+                        </div>
                     </div>
-                </form>
-
-                {{-- <li class="list-group-item">
-                    <form action="/logout" method="post">
-                    @csrf
-                        <button type="submit">
-                        <div class="row" type="submit">
-                            
-                                <div class="col-2 align-self-center">	
-                                    <i class="fa fa-door-open" style="color:#e86969"></i>
-                                </div>
-                                <div class="col">
-                                    <a style="color:#e86969">Log Out</a>
-                                </div>
-                            
-                        </div>
-                        </button>
-                    </form>
-                </li> --}}
-
-                {{-- <li class="list-group-item">
-                    <form action="/logout" method="post">
-                        @csrf
-                        <div class="row" onclick="window.location.href='document.form.submit();'">
-                            <div class="col-2 align-self-center">	
-                                <i class="fa fa-door-open" style="color:#e86969"></i>
-                            </div>
-                            <div class="col">
-                                <a style="color:#e86969">Log Out</a>
-                            </div>
-                        </div>
-                    </form>
-                </li> --}}
+                </li>
             </ul>
         </nav>
 
